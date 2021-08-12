@@ -1,0 +1,31 @@
+# ===================================
+#  Form Field Definitions
+# ===================================
+
+fields:
+    id:
+        label: ID
+        disabled: true
+    youtube_url:
+        label: "dimti.video::lang.models.video.labels.youtube_url"
+    youtube_short_url:
+        label: "dimti.video::lang.models.video.labels.youtube_short_url"
+        span: auto
+    youtube_embed_url:
+        label: "dimti.video::lang.models.video.labels.youtube_embed_url"
+        span: auto
+    video_src_url:
+        label: "dimti.video::lang.models.video.labels.video_src_url"
+    preview:
+        label: "dimti.video::lang.models.video.labels.preview"
+        type: fileupload
+        fileTypes: gif,jpg,jpeg,png
+        imageWidth: 120
+        imageHeight: 90
+        attachOnUpload: true
+        thumbOptions:
+            mode: fit
+        span: auto
+    thumbnail_url:
+        label: "dimti.video::lang.models.video.labels.thumbnail_url"
+        span: auto

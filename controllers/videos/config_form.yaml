@@ -1,0 +1,31 @@
+# ===================================
+#  Form Behavior Config
+# ===================================
+
+# Record name
+name: Video
+
+# Model Form Field configuration
+form: $/dimti/video/models/video/fields.yaml
+
+# Model Class name
+modelClass: Dimti\Video\Models\Video
+
+# Default redirect location
+defaultRedirect: dimti/video/videos
+
+# Create page
+create:
+    title: backend::lang.form.create_title
+    redirect: dimti/video/videos/update/:id
+    redirectClose: dimti/video/videos
+
+# Update page
+update:
+    title: backend::lang.form.update_title
+    redirect: dimti/video/videos
+    redirectClose: dimti/video/videos
+
+# Preview page
+preview:
+    title: backend::lang.form.preview_title

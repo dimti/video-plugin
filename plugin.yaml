@@ -1,0 +1,10 @@
+plugin:
+    name: 'dimti.video::lang.plugin.name'
+    description: 'dimti.video::lang.plugin.description'
+    author: 'Alexander Demidov <demidov@dimti.ru>'
+    icon: oc-icon-youtube-play
+    homepage: ''
+permissions:
+    dimti.video.settings:
+        tab: 'dimti.video::lang.plugin.name'
+        label: 'dimti.video::lang.permissions.settings'

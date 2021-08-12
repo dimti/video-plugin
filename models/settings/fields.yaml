@@ -1,0 +1,23 @@
+# ===================================
+#  Form Field Definitions
+# ===================================
+tabs:
+    stretch: true
+    defaultTab: General
+    cssClass: text-blue
+    paneCssClass:
+        0: first-tab
+        1: second-tab
+    icons:
+        backend::lang.account.user: icon-user
+        backend::lang.account.groups: icon-group
+    fields:
+        preview:
+            label: "dimti.video::lang.models.settings.labels.preview"
+            type: fileupload
+            fileTypes: gif,jpg,jpeg,png
+            imageWidth: 120
+            imageHeight: 90
+            attachOnUpload: true
+            thumbOptions:
+                mode: fit

@@ -1,0 +1,12 @@
+1.0.1:
+    - 'First version of video'
+    - create_videos_table.php
+1.0.2:
+    - '+ default preview placeholder download into settings model'
+    - seeder102.php
+1.0.3:
+    - '+ youtube url into dimti_video_videos table'
+    - builder_table_update_dimti_video_videos.php
+1.0.4:
+    - '+ thumbnail url into dimti_video_videos table'
+    - builder_table_update_dimti_video_videos_2.php
