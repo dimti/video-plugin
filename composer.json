@@ -1,7 +1,22 @@
 {
-    "name": "dimti/video-plugin",
+    "name": "dimti/oc-video-plugin",
     "type": "october-plugin",
-    "description": "No description provided yet...",
+    "description": "Video links saver and render embed html blocks",
+    "keywords": [
+        "october",
+        "cms",
+        "video",
+        "youtube",
+        "embed",
+        "plugin"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Alexander Demidov",
+            "email": "demidov@dimti.ru"
+        }
+    ],
     "require": {
         "composer/installers": "~1.0"
     }
