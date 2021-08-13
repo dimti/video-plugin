@@ -1,5 +1,5 @@
 {
-    "name": "dimti/oc-video-plugin",
+    "name": "dimti/video-plugin",
     "type": "october-plugin",
     "description": "Video links saver and render embed html blocks",
     "keywords": [
