@@ -10,3 +10,6 @@
 1.0.4:
     - '+ thumbnail url into dimti_video_videos table'
     - builder_table_update_dimti_video_videos_2.php
+1.1.0:
+    - 'Index on context columns of dimti_video_videos'
+    - migration110.php
