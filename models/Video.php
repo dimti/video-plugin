@@ -11,6 +11,9 @@ class Video extends Model
 {
     use \October\Rain\Database\Traits\Validation;
 
+    const YOUTUBE_URL_TYPE_SHORT = 0;
+    const YOUTUBE_URL_TYPE_FULL = 1;
+
     /**
      * @var string table associated with the model
      */
@@ -100,19 +103,32 @@ class Video extends Model
             $this->youtube_embed_url = TwigFilters::youtubeEmbedUrl($this->youtube_short_url);
         }
 
-        if (!$this->preview && ($this->youtube_embed_url || $this->thumbnail_url)) {
-            if (!$this->thumbnail_url && $this->youtube_embed_url) {
-                $this->thumbnail_url = TwigFilters::youtubeEmbedThumbnail($this->youtube_embed_url);
-            }
-
-            if ($this->thumbnail_url) {
-                try {
+        if (!$this->preview) {
+            try {
+                if ($this->thumbnail_url) {
                     $this->preview = (new File())->fromUrl($this->thumbnail_url);
-                } catch (\Exception $e) {
-                    \Log::error('Details object with unable to download the file', $this->attributes);
+                } else {
+                    $youtubePreviewImageDef = static::createYoutubePreviewImageFile($this->youtube_url ?: $this->youtube_short_url);
 
-                    throw $e;
+                    if ($youtubePreviewImageDef !== false) {
+                        list(
+                            $this->thumbnail_url,
+                            $this->preview
+                        ) = $youtubePreviewImageDef;
+                    } else {
+                        if ($this->youtube_embed_url) {
+                            $this->thumbnail_url = TwigFilters::youtubeEmbedThumbnail($this->youtube_embed_url);
+                        }
+                    }
                 }
+
+                if ($this->thumbnail_url && !$this->preview) {
+                    $this->preview = (new File())->fromUrl($this->thumbnail_url);
+                }
+            } catch (\Exception $e) {
+                \Log::error('Details object with unable to download the file', $this->attributes);
+
+                throw $e;
             }
         }
     }
@@ -127,5 +143,44 @@ class Video extends Model
     public function getPreview()
     {
         return $this->preview ?? Settings::instance()->preview;
+    }
+
+    /**
+     * @param string $youtubeUrl
+     * @return null|int
+     */
+    public static function detectYoutubeUrlType($youtubeUrl)
+    {
+        if (strpos($youtubeUrl, 'youtu.be') !== false) {
+            return static::YOUTUBE_URL_TYPE_SHORT;
+        }
+
+        if (strpos($youtubeUrl, 'youtube.com') !== false) {
+            return static::YOUTUBE_URL_TYPE_FULL;
+        }
+
+        return null;
+    }
+
+    /**
+     * @param string $youtubeVideoUrl
+     * @return false|array [
+     *     0 => string Url превью-картинки,
+     *     1 => File Файл превью-картинки
+     * ]
+     * @throws \Exception
+     */
+    public static function createYoutubePreviewImageFile($youtubeVideoUrl)
+    {
+        $youtubeVideoId = preg_replace('/.*(youtu\.be|youtube\.com\/embed)\/([^?]+).*\/?/', '$2', $youtubeVideoUrl);
+
+        if ($youtubeVideoId) {
+            return [
+                $previewImageUrl = 'https://img.youtube.com/vi/' . $youtubeVideoId . '/hqdefault.jpg',
+                (new File)->fromUrl($previewImageUrl)
+            ];
+        }
+
+        return false;
     }
 }
