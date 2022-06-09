@@ -13,6 +13,7 @@ class Video extends Model
 
     const YOUTUBE_URL_TYPE_SHORT = 0;
     const YOUTUBE_URL_TYPE_FULL = 1;
+    const YOUTUBE_URL_TYPE_EMBED = 2;
 
     /**
      * @var string table associated with the model
@@ -156,6 +157,10 @@ class Video extends Model
         }
 
         if (strpos($youtubeUrl, 'youtube.com') !== false) {
+            if (strpos($youtubeUrl, '/embed/') !== false) {
+                return static::YOUTUBE_URL_TYPE_EMBED;
+            }
+
             return static::YOUTUBE_URL_TYPE_FULL;
         }
 
@@ -172,7 +177,7 @@ class Video extends Model
      */
     public static function createYoutubePreviewImageFile($youtubeVideoUrl)
     {
-        $youtubeVideoId = preg_replace('/.*(youtu\.be|youtube\.com\/embed)\/([^?]+).*\/?/', '$2', $youtubeVideoUrl);
+        $youtubeVideoId = static::getYoutubeVideoId($youtubeVideoUrl);
 
         if ($youtubeVideoId) {
             return [
@@ -182,5 +187,14 @@ class Video extends Model
         }
 
         return false;
+    }
+
+    /**
+     * @param string $youtubeVideoUrl
+     * @return string
+     */
+    public static function getYoutubeVideoId($youtubeVideoUrl)
+    {
+        return preg_replace('/.*(?:youtu\.be\/|youtube\.com\/(?:embed\/|watch\?v=))([^?]+).*\/?/', '$1', $youtubeVideoUrl);
     }
 }
