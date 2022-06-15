@@ -1,7 +1,10 @@
 <?php namespace Dimti\Video\Models;
 
 use Dimti\Video\Classes\TwigFilters;
+use Illuminate\Database\Query\Expression;
 use Model;
+use October\Rain\Database\Builder;
+use Schema;
 use System\Models\File;
 
 /**
@@ -109,7 +112,7 @@ class Video extends Model
                 if ($this->thumbnail_url) {
                     $this->preview = (new File())->fromUrl($this->thumbnail_url);
                 } else {
-                    $youtubePreviewImageDef = static::createYoutubePreviewImageFile($this->youtube_url ?: $this->youtube_short_url);
+                    $youtubePreviewImageDef = static::createYoutubePreviewImageFile($this->youtube_url ?: ($this->youtube_short_url ?: $this->youtube_embed_url));
 
                     if ($youtubePreviewImageDef !== false) {
                         list(
@@ -139,6 +142,37 @@ class Video extends Model
         if ($preview = $this->preview()->getResults()) {
             $preview->delete();
         }
+    }
+
+    /**
+     * Условие на соответствие какого-либо поля url видео переданному выражению
+     *
+     * @param Builder $query
+     * @param mixed|Expression $value
+     * @return Builder
+     */
+    public function scopeWhereAnyVideoUrl($query, $value)
+    {
+        $query->where(function ($query) use ($value) {
+            foreach (static::getVideoUrlColumns() as $videoUrlColumn) {
+                $query->orWhere($videoUrlColumn, $value);
+            }
+        });
+
+        return $query;
+    }
+
+    protected static $videoUrlColumns = [];
+
+    /**
+     * @return array
+     */
+    protected static function getVideoUrlColumns()
+    {
+        return static::$videoUrlColumns ?: (static::$videoUrlColumns = array_filter(
+            Schema::getColumnListing((new static)->getTable()),
+            fn ($c) => preg_match('/(youtube|video).*url/', $c)
+        ));
     }
 
     public function getPreview()
