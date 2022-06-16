@@ -175,9 +175,26 @@ class Video extends Model
         ));
     }
 
+    /**
+     * @return File|null
+     */
     public function getPreview()
     {
         return $this->preview ?? Settings::instance()->preview;
+    }
+
+    /**
+     * @param int|null $width
+     * @param int|null $height
+     * @return string|null
+     */
+    public function getPreviewThumb($width = null, $height = null)
+    {
+        if ($preview = $this->getPreview()) {
+            return $preview->getThumb($width, $height);
+        }
+
+        return null;
     }
 
     /**
