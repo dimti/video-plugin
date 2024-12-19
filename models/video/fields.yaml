@@ -18,7 +18,7 @@ fields:
         label: "dimti.video::lang.models.video.labels.video_src_url"
     preview:
         label: "dimti.video::lang.models.video.labels.preview"
-        type: fileupload
+        type: Dimti\Mirsporta\FormWidgets\FileUpload
         fileTypes: gif,jpg,jpeg,png
         imageWidth: 120
         imageHeight: 90
